@@ -11,8 +11,8 @@ app.stepsPerSecond = 5
 
 
 #GRID
-app.rows = 10
-app.cols = 10
+app.rows = 4
+app.cols = 4
 app.grid = makeList(app.rows, app.cols)
 
 
@@ -66,8 +66,9 @@ def onKeyPress(key):
 
 
 #FOOD
-food = Group(Circle(randrange(posX, posX2), randrange(posY, posY2), 20, fill='red'))
-
+randcol = randrange(0, 8)
+randrow = randrange(0, 8)
+food = Group(Circle(25 + randcol*50, 25 + randrow*50, 20, fill='red'))
 
 #GAMEOVER
 def gameOver():
@@ -102,14 +103,9 @@ def onStep():
         snake[i].toFront()
 
 
-
-
-
-print(food.centerX)
-print(food.centerY)
-
-
-
+#HITSFOOD
+    if (snake[0].hitsShape(food)):
+        food.clear()
 
 
 
