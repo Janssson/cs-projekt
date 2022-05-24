@@ -66,13 +66,28 @@ def onKeyPress(key):
 
 
 #FOOD
-randcol = randrange(0, 8)
-randrow = randrange(0, 8)
-food = Group(Circle(25 + randcol*50, 25 + randrow*50, 20, fill='red'))
+food = Group(Circle(25 + randrange(0, 8)*50, 25 + randrange(0, 8)*50, 20, fill='red'))
+def foodSpawn():
+    randcol = randrange(0, 8)
+    randrow = randrange(0, 8)
+    food.centerX = randcol
+    food.centerY = randrow
+    pass
+foodSpawn()
+
+
+# Goal = Star(200, 200, 20, 5, fill = "yellow")
+# def GoalSpawn():
+#     X = randrange(25,375)
+#     Y = randrange(25,375)
+#     Goal.centerX = X
+#     Goal.centerY = Y
+#     pass
+# GoalSpawn()
 
 #GAMEOVER
 def gameOver():
-    Label('LOST', 200, 50, fill='white')
+    app.stop()
 
 
 #MOVECIRCLE
@@ -106,8 +121,12 @@ def onStep():
 #HITSFOOD
     if (snake[0].hitsShape(food)):
         food.clear()
+        snake.append(Circle(positions[i-1][0], positions[i-1][1], 25))
 
 
+#HITSSNAKE
+    if (snake[0].hitsShape(snake[i])):
+        gameOver()
 
 
 
