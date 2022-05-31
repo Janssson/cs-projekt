@@ -6,6 +6,9 @@ from cmu_graphics import *
 #BACKGROUND
 app.background = rgb(197, 245, 86)
 
+#INFO
+deathScreen = Rect(25, 25, 350, 350, fill=rgb(221, 222, 220), visible = False)
+
 
 #FPS
 app.stepsPerSecond = 5
@@ -22,7 +25,7 @@ app.dist = 50
 
 
 #PLAYER
-color = gradient('blue', 'darkblue', start='right')
+color = gradient('blue', 'darkblue', start='top')
 snakeHead = Group(Circle(175, 175, 25, fill=color))
 snake = [snakeHead, Circle(175-app.dist, 175, 25, fill=color),
         Circle(175-app.dist * 2, 175, 25, fill=color)]
@@ -31,7 +34,7 @@ snakeEyes2 = Group(Circle(165, 175, 5), Circle(185, 175, 5))
 snakeHead.add(snakeEyes1)
 snakeHead.add(snakeEyes2)
 
-#app.snakeOffscreen = False
+app.snakeOffscreen = False
 app.snakeDx = 1
 app.snakeDy = 0
 
@@ -75,6 +78,10 @@ def onKeyPress(key):
         if (app.snakeDy == 0):
             newSnakeSpeed(0, -1)
             #snakeEyes1.visible = False
+    
+    if (key == 'r'):
+        app.paused = False
+        deathScreen.visible = False
 
 
 #FOOD
@@ -90,7 +97,10 @@ foodSpawn()
 #GAMEOVER
 def gameOver():
     count.value = 0
-    Rect(25, 25, 350, 350, fill=rgb(221, 222, 220))
+    deathScreen.visible = True
+    deathScreen.toFront()
+    app.paused = True
+
 
 
 #MOVECIRCLE
@@ -103,17 +113,11 @@ count = Label(0, 375, 25, fill='white', size=40)
 
 
 def onStep():
-    # if (snake[0].centerX > 400 or snake[0].centerX < 0 or snake[0].centerY > 400 or snake[0].centerY < 0):
-    #     app.snakeOffscreen = True
+    if (snake[0].centerX > 400 or snake[0].centerX < 0 or snake[0].centerY > 400 or snake[0].centerY < 0):
+        app.snakeOffscreen = True
 
-    # if (app.snakeOffscreen == True):
-    #     gameOver()
-
-    if (snake[0].centerX > 400):
-        snake[0].centerX = -150
-    
-    elif (snake[0].centerX < 0):
-        snake[0].centerX = 550
+    if (app.snakeOffscreen == True):
+        gameOver()
 
     positions = []
 
