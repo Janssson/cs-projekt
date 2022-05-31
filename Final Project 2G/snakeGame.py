@@ -1,9 +1,10 @@
 #IMPORT
+from trace import Trace
 from cmu_graphics import *
 
 
 #BACKGROUND
-app.background = 'lightgreen'
+app.background = rgb(197, 245, 86)
 
 
 #FPS
@@ -21,10 +22,16 @@ app.dist = 50
 
 
 #PLAYER
-snake = [Circle(175, 175, 25), Circle(175-app.dist, 175, 25),
-        Circle(175-app.dist * 2, 175, 25)]
+color = gradient('blue', 'darkblue', start='right')
+snakeHead = Group(Circle(175, 175, 25, fill=color))
+snake = [snakeHead, Circle(175-app.dist, 175, 25, fill=color),
+        Circle(175-app.dist * 2, 175, 25, fill=color)]
+snakeEyes1 = Group(Circle(175, 165, 5), Circle(175, 185, 5))
+snakeEyes2 = Group(Circle(165, 175, 5), Circle(185, 175, 5))
+snakeHead.add(snakeEyes1)
+snakeHead.add(snakeEyes2)
 
-app.snakeOffscreen = False
+#app.snakeOffscreen = False
 app.snakeDx = 1
 app.snakeDy = 0
 
@@ -36,7 +43,7 @@ for row in range(app.rows):
         posX2 = 50 + col * 100
         posY = 0 + row * 100
         posY2 = 50 + row * 100
-        gridColor = 'green'
+        gridColor = rgb(189, 235, 82)
         app.grid[row][col] = Group(Rect(posX, posY, 50, 50, fill=gridColor), Rect(posX2, posY2, 50, 50, fill=gridColor))
 
 
@@ -51,43 +58,39 @@ def onKeyPress(key):
     if (key == 'd'):
         if (app.snakeDx == 0):
             newSnakeSpeed(1, 0)
+            #snakeEyes2.visible = False
 
-    if (key == 'a'):
+
+    elif (key == 'a'):
         if (app.snakeDx == 0):
             newSnakeSpeed(-1, 0)
-    
-    if (key == 's'):
+            #snakeEyes2.visible = False
+
+    elif (key == 's'):
         if (app.snakeDy == 0):
             newSnakeSpeed(0, 1)
+            #snakeEyes1.visible = False
     
-    if (key == 'w'):
+    elif (key == 'w'):
         if (app.snakeDy == 0):
             newSnakeSpeed(0, -1)
+            #snakeEyes1.visible = False
 
 
 #FOOD
 food = Group(Circle(25 + randrange(0, 8)*50, 25 + randrange(0, 8)*50, 20, fill='red'))
 def foodSpawn():
-    randcol = randrange(0, 8)
-    randrow = randrange(0, 8)
+    randcol = 25+randrange(0, 8)*50
+    randrow = 25+randrange(0, 8)*50
     food.centerX = randcol
     food.centerY = randrow
-    pass
 foodSpawn()
 
 
-# Goal = Star(200, 200, 20, 5, fill = "yellow")
-# def GoalSpawn():
-#     X = randrange(25,375)
-#     Y = randrange(25,375)
-#     Goal.centerX = X
-#     Goal.centerY = Y
-#     pass
-# GoalSpawn()
-
 #GAMEOVER
 def gameOver():
-    app.stop()
+    count.value = 0
+    Rect(25, 25, 350, 350, fill=rgb(221, 222, 220))
 
 
 #MOVECIRCLE
@@ -95,13 +98,22 @@ def moveCircle(circle, dx, dy):
     circle.centerX += dx * app.dist
     circle.centerY += dy * app.dist
 
+#FOODCOUNT
+count = Label(0, 375, 25, fill='white', size=40)
+
 
 def onStep():
-    if (snake[0].centerX > 400 or snake[0].centerX < 0 or snake[0].centerY > 400 or snake[0].centerY < 0):
-        app.snakeOffscreen = True
+    # if (snake[0].centerX > 400 or snake[0].centerX < 0 or snake[0].centerY > 400 or snake[0].centerY < 0):
+    #     app.snakeOffscreen = True
 
-    if (app.snakeOffscreen == True):
-        gameOver()
+    # if (app.snakeOffscreen == True):
+    #     gameOver()
+
+    if (snake[0].centerX > 400):
+        snake[0].centerX = -150
+    
+    elif (snake[0].centerX < 0):
+        snake[0].centerX = 550
 
     positions = []
 
@@ -120,8 +132,9 @@ def onStep():
 
 #HITSFOOD
     if (snake[0].hitsShape(food)):
-        food.clear()
-        snake.append(Circle(positions[i-1][0], positions[i-1][1], 25))
+        snake.append(Circle(positions[i-1][0], positions[i-1][1], 25, fill=color))
+        foodSpawn()
+        count.value += 1
 
 
 #HITSSNAKE
