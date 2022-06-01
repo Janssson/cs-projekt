@@ -10,6 +10,7 @@ app.background = rgb(197, 245, 86)
 deathScreen = Rect(25, 25, 350, 350, fill=rgb(221, 222, 220), visible = False)
 
 
+
 #FPS
 app.stepsPerSecond = 7
 
@@ -95,7 +96,7 @@ foodSpawn()
 #GAMEOVER
 def gameOver():
     count.value = 0
-    deathScreen.visible = True
+    deathScreen.visible = False
     deathScreen.toFront()
     app.paused = True
 
