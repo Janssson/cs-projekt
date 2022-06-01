@@ -11,7 +11,7 @@ deathScreen = Rect(25, 25, 350, 350, fill=rgb(221, 222, 220), visible = False)
 
 
 #FPS
-app.stepsPerSecond = 5
+app.stepsPerSecond = 7
 
 
 #GRID
@@ -25,14 +25,13 @@ app.dist = 50
 
 
 #PLAYER
-color = gradient('blue', 'darkblue', start='top')
-snakeHead = Group(Circle(175, 175, 25, fill=color))
-snake = [snakeHead, Circle(175-app.dist, 175, 25, fill=color),
-        Circle(175-app.dist * 2, 175, 25, fill=color)]
+colorTop = gradient('blue', 'darkblue', start='top')
+
+snakeHead = Group(Circle(175, 175, 25, fill=colorTop))
+snake = [snakeHead, Circle(175-app.dist, 175, 25, fill=colorTop),
+        Circle(175-app.dist * 2, 175, 25, fill=colorTop)]
 snakeEyes1 = Group(Circle(175, 165, 5), Circle(175, 185, 5))
-snakeEyes2 = Group(Circle(165, 175, 5), Circle(185, 175, 5))
 snakeHead.add(snakeEyes1)
-snakeHead.add(snakeEyes2)
 
 app.snakeOffscreen = False
 app.snakeDx = 1
@@ -61,23 +60,22 @@ def onKeyPress(key):
     if (key == 'd'):
         if (app.snakeDx == 0):
             newSnakeSpeed(1, 0)
-            #snakeEyes2.visible = False
-
+            snakeEyes1.rotateAngle = 0
 
     elif (key == 'a'):
         if (app.snakeDx == 0):
             newSnakeSpeed(-1, 0)
-            #snakeEyes2.visible = False
+            snakeEyes1.rotateAngle = 0
 
     elif (key == 's'):
         if (app.snakeDy == 0):
             newSnakeSpeed(0, 1)
-            #snakeEyes1.visible = False
+            snakeEyes1.rotateAngle = 90
     
     elif (key == 'w'):
         if (app.snakeDy == 0):
             newSnakeSpeed(0, -1)
-            #snakeEyes1.visible = False
+            snakeEyes1.rotateAngle = 90
     
     if (key == 'r'):
         app.paused = False
@@ -136,7 +134,7 @@ def onStep():
 
 #HITSFOOD
     if (snake[0].hitsShape(food)):
-        snake.append(Circle(positions[i-1][0], positions[i-1][1], 25, fill=color))
+        snake.append(Circle(positions[i-1][0], positions[i-1][1], 25, fill=colorTop))
         foodSpawn()
         count.value += 1
 
