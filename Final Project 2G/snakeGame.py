@@ -100,19 +100,24 @@ def gameOver():
     app.paused = True
 
 
+#CHECKBOUNDARY
+def checkBoundary():
+    if (snake[0].centerX > 400 or snake[0].centerX < 0 or snake[0].centerY > 400 or snake[0].centerY < 0):
+        app.snakeOffscreen = True
+
 
 #MOVECIRCLE
 def moveCircle(circle, dx, dy):
     circle.centerX += dx * app.dist
     circle.centerY += dy * app.dist
 
+
 #FOODCOUNT
 count = Label(0, 375, 25, fill='white', size=40)
 
 
 def onStep():
-    if (snake[0].centerX > 400 or snake[0].centerX < 0 or snake[0].centerY > 400 or snake[0].centerY < 0):
-        app.snakeOffscreen = True
+    checkBoundary()
 
     if (app.snakeOffscreen == True):
         gameOver()
